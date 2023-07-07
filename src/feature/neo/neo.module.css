@@ -1,0 +1,23 @@
+.container {
+    width: 50%;
+    margin: 0 auto;
+    padding: 30px;
+
+    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2), 0px 6px 20px 0px rgba(0, 0, 0, 0.19);
+
+    background-color: #6741d9;
+    border: 2px solid #9775fa;
+    border-radius: 15px;
+
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+
+.img {
+    height: calc(100% - 64px);
+    background: url('https://images.unsplash.com/photo-1596501048409-9f3a65442e1f') center no-repeat;
+    background-size: cover;
+
+    padding-top: 200px;
+}
