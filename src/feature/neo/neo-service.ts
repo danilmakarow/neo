@@ -10,44 +10,75 @@ let todayData: string;
 let neoElementsArr: NEO[] = [];
 let neoToDisplay: NEO[] = [];
 
+let intervalId;
+
 export function setupData(): void {
     const today = new Date();
      todayData = today.toLocaleDateString('en-CA');
 
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    currentData =startData = firstDayOfMonth.toLocaleDateString('en-CA');
+    currentData = startData = firstDayOfMonth.toLocaleDateString('en-CA');
 }
 
 export async function onNewDay(): Promise<null> {
+    console.log(currentData)
     neoToDisplay = [];
-    console.log('service: ', neoToDisplay)
     const data = await getNeoData(currentData);
     neoElementsArr = [...data.near_earth_objects[currentData]];
 
     store.dispatch(updateStatistics(calcStatistics(neoElementsArr)));
 
-    const removed = neoElementsArr.splice(1)[0]
+    updateDisplayArray()
 
-    neoToDisplay.push(removed)
-    store.dispatch(updateNeoDisplay([...neoToDisplay]))
+    addNewElement()
 }
 
 function addNewElement(): void {
+    if (intervalId) {
+        clearInterval(intervalId);
+    }
+
+    intervalId = setInterval(() => {
+        if (neoElementsArr.length > 0) {
+            updateDisplayArray()
+        } else {
+            clearInterval(intervalId);
+            console.log(getNextDay(currentData))
+            currentData = getNextDay(currentData);
+            onNewDay();
+        }
+    }, 1000);
 
 }
+
+function updateDisplayArray(): void {
+    const removed = neoElementsArr.splice(0, 1)[0];
+    neoToDisplay.push(removed);
+
+    console.log('before', neoToDisplay)
+    if(neoToDisplay.length > 6) {
+        neoToDisplay.shift()
+        console.log('after', neoToDisplay)
+    }
+
+    store.dispatch(updateNeoDisplay([...neoToDisplay]));
+}
+
 
 
 function getNextDay(data: string): string {
     const dataArr = data.split('-');
-    dataArr[2]++
+    dataArr[2] = (parseInt(dataArr[2]) + 1).toString();
 
-    if(dataArr[2] < todayData.slice(-2))
-        return startData
+    if (parseInt(dataArr[2]) > parseInt(todayData.slice(-2))) {
+        return startData;
+    }
 
-    if(dataArr[2].toString().length === 1)
-        dataArr[2] = '0' + dataArr[2]
+    if (dataArr[2].length === 1) {
+        dataArr[2] = '0' + dataArr[2];
+    }
 
-    return dataArr.join('-')
+    return dataArr.join('-');
 }
 
 export async function getNeoData(date): Promise<NEOData> {

@@ -9,7 +9,8 @@ import {CircularProgress} from "@mui/material";
 
 export default function ElementList() {
     const neos = useSelector((state: RootState) => state.neoDisplay.neos);
-    console.log(neos)
+    // console.log('component', neos)
+
     if (!neos[0]) {
         return <CircularProgress />;
     }
