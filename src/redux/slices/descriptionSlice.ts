@@ -1,10 +1,10 @@
 // serviceSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {Statistics} from "../../shared/interfaces/api.interfaces";
+import {Stats} from "../../shared/interfaces/api.interfaces";
 import {updateStatistics} from "../serviceActions";
 
 interface ServiceState {
-    statistics: Statistics;
+    statistics: Stats;
 }
 
 const initialState: ServiceState = {
@@ -23,7 +23,7 @@ const descriptionSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(updateStatistics, (state, action: PayloadAction<Statistics>) => {
+        builder.addCase(updateStatistics, (state, action: PayloadAction<Stats>) => {
             state.statistics = action.payload;
         });
     },

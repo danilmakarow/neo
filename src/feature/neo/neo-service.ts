@@ -1,6 +1,6 @@
 import {fetchNeo} from "../../redux/slices/apiSlice";
 import {store} from "../../redux/store";
-import {NEO, Statistics} from "../../shared/interfaces/api.interfaces";
+import {NEO, NEOData, Stats} from "../../shared/interfaces/api.interfaces";
 import {updateStatistics} from "../../redux/serviceActions";
 
 let startData: string;
@@ -18,11 +18,18 @@ export function setupData(): void {
     currentData =startData = firstDayOfMonth.toLocaleDateString('en-CA');
 }
 
-export async function onNewDay() {
+export async function onNewDay(): Promise<null> {
     const data = await getNeoData(currentData);
     neoElementsArr = data.near_earth_objects[currentData];
 
     store.dispatch(updateStatistics(calcStatistics(neoElementsArr)));
+
+    const removed = neoElementsArr.splice(1)[0]
+    neoToDisplay.push(removed)
+}
+
+function addNewElement(): void {
+
 }
 
 
@@ -39,7 +46,7 @@ function getNextDay(data: string): string {
     return dataArr.join('-')
 }
 
-export async function getNeoData(date) {
+export async function getNeoData(date): Promise<NEOData> {
     // Sending fetch action
     await store.dispatch(fetchNeo(date));
 
@@ -48,7 +55,7 @@ export async function getNeoData(date) {
     return state.neo.data
 }
 
-function calcStatistics(neo: NEO[]): Statistics {
+function calcStatistics(neo: NEO[]): Stats {
     const amount = neo.length;
     const hazardous = neo.filter(object => object.is_potentially_hazardous_asteroid).length
     const big = neo.reduce((acc, obj) =>

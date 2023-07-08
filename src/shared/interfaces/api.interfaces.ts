@@ -64,7 +64,7 @@ export interface NEO {
     is_sentry_object: boolean;
 }
 
-export interface Statistics {
+export interface Stats {
     amount: number,
     hazardous: number,
     date: string,
