@@ -1,17 +1,20 @@
 .container {
-    width: 50%;
+    width: 60%;
+    min-width: 550px;
+    height: 655px;
     margin: 0 auto;
     padding: 30px 10px;
 
     box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2), 0px 6px 20px 0px rgba(0, 0, 0, 0.19);
 
-    background-color: #6741d9;
-    border: 2px solid #9775fa;
+    background-color: rgba(73, 80, 87, 0.6);
+    border: 2px solid #495057;
     border-radius: 15px;
 
-    display: flex;
-    justify-content: center;
-    gap: 20px;
+
+    display: grid;
+    grid-template-columns:0.6fr 0.4fr;
+    gap: 70px;
 }
 
 .img {
@@ -19,5 +22,5 @@
     background: url('https://images.unsplash.com/photo-1596501048409-9f3a65442e1f') center no-repeat;
     background-size: cover;
 
-    padding-top: 200px;
+    padding-top: 100px;
 }

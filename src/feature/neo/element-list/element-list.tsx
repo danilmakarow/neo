@@ -3,21 +3,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
-import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-import {fetchNeo} from "../../../redux/slices/apiSlice";
+import {RootState} from "../../../redux/store";
+import {CircularProgress} from "@mui/material";
 
 export default function ElementList() {
-    const dispatch = useDispatch();
-    const neoData = useSelector((state) => state.neo.data);
-
-    // React.useEffect(() => {
-    //     dispatch(fetchNeo('2022-10-04'));
-    // }, [dispatch]);
-    //
-    // React.useEffect(() => {
-    //     console.log(neoData);
-    // }, [neoData]);
+    const neos = useSelector((state: RootState) => state.neoDisplay.neos);
+    console.log(neos)
+    if (!neos[0]) {
+        return <CircularProgress />;
+    }
 
     return (
         <div>
@@ -27,38 +22,47 @@ export default function ElementList() {
                 </Typography>
             </header>
             <List sx={{ width: '100%', minWidth: 300, bgcolor: 'inherit' }}>
-                <ListItem >
-                    <div className='width--100'>
-                        <header>
-                            <Typography variant="h6">
-                                Name
-                            </Typography>
-                            <Typography component="div" variant="body2" >
-                                Full name:
-                            </Typography>
-                        </header>
-                        <span className="flex flex--space-between">
-                            <div>
-                                <Typography variant="body2">
-                                    Speed: 500 y.e.
-                                </Typography>
-                                <Typography variant="body2">
-                                    Size: 500 y.e.
-                                </Typography>
-                            </div>
-                            <div>
-                                <Typography variant="body2">
-                                    Distance to earth: 500
-                                </Typography>
-                                <Typography variant="body2">
-                                    Potentially hazardous:
-                                </Typography>
-                            </div>
-                        </span>
-                    </div>
-                </ListItem>
+                {
+                    neos.map(
+                        (neo, index) =>
+                            <div key={neo.index}>
+                                <ListItem >
+                                    <div className='width--100'>
+                                        <header>
+                                            <Typography variant="h6">
+                                                {neo.name}
+                                            </Typography>
+                                        </header>
+                                        <span className="flex flex--space-between">
+                                            <div>
+                                                <Typography variant="body2">
+                                                    Speed: {neo.close_approach_data[0].relative_velocity.kilometers_per_second.split('.')[0]} km/s
+                                                </Typography>
+                                                <Typography variant="body2">
+                                                    Size: {neo.estimated_diameter.meters.estimated_diameter_max.toFixed(0)} meters
+                                                </Typography>
+                                            </div>
+                                            <div>
+                                                <Typography variant="body2" >
+                                                    Distance to earth: {parseFloat(neo.close_approach_data[0].miss_distance.kilometers.split('.')[0]).toLocaleString()} km
+                                                </Typography>
+                                                {
+                                                    neo.is_potentially_hazardous_asteroid ?
+                                                        <Typography variant="body2">
+                                                            Potentially hazardous
+                                                        </Typography>
+                                                        :
+                                                        ''
+                                                }
 
-                <Divider variant="fullWidth" component="li" />
+                                            </div>
+                                        </span>
+                                    </div>
+                                </ListItem>
+                            </div>
+                    )
+                }
+                
             </List>
         </div>
     );

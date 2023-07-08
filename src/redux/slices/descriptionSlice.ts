@@ -1,13 +1,12 @@
-// serviceSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {Stats} from "../../shared/interfaces/api.interfaces";
-import {updateStatistics} from "../serviceActions";
+import {updateStatistics} from "../actions";
 
-interface ServiceState {
+interface DescriptionState {
     statistics: Stats;
 }
 
-const initialState: ServiceState = {
+const initialState: DescriptionState = {
     statistics: {
         amount: 0,
         hazardous: 0,

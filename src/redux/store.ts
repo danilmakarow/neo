@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
-import apiReducer from "./slices/apiSlice";
+import neoDataReduce from "./slices/apiSlice";
 import descReducer from "./slices/descriptionSlice";
+import neoDisplayReducer from "./slices/neoDisplaySlice";
 
 export const store = configureStore({
     reducer: {
-        neo: apiReducer,
+        neoData: neoDataReduce,
         description: descReducer,
+        neoDisplay: neoDisplayReducer
     },
 });
 

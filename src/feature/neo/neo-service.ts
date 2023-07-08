@@ -1,7 +1,7 @@
 import {fetchNeo} from "../../redux/slices/apiSlice";
 import {store} from "../../redux/store";
 import {NEO, NEOData, Stats} from "../../shared/interfaces/api.interfaces";
-import {updateStatistics} from "../../redux/serviceActions";
+import {updateNeoDisplay, updateStatistics} from "../../redux/actions";
 
 let startData: string;
 let currentData: string;
@@ -19,13 +19,17 @@ export function setupData(): void {
 }
 
 export async function onNewDay(): Promise<null> {
+    neoToDisplay = [];
+    console.log('service: ', neoToDisplay)
     const data = await getNeoData(currentData);
-    neoElementsArr = data.near_earth_objects[currentData];
+    neoElementsArr = [...data.near_earth_objects[currentData]];
 
     store.dispatch(updateStatistics(calcStatistics(neoElementsArr)));
 
     const removed = neoElementsArr.splice(1)[0]
+
     neoToDisplay.push(removed)
+    store.dispatch(updateNeoDisplay([...neoToDisplay]))
 }
 
 function addNewElement(): void {
@@ -52,7 +56,7 @@ export async function getNeoData(date): Promise<NEOData> {
 
     const state = store.getState();
 
-    return state.neo.data
+    return state.neoData.data
 }
 
 function calcStatistics(neo: NEO[]): Stats {

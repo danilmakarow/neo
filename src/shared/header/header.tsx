@@ -10,7 +10,7 @@ import {AppBar} from "@mui/material";
 export default function Header() {
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
+            <AppBar position="static" sx={{ bgcolor: '#1f2937' }}>
                 <Toolbar>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Near Orbital Objects

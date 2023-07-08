@@ -6,7 +6,7 @@ const API_URL = import.meta.env.VITE_NASA_API_URL;
 const API_KEY = import.meta.env.VITE_NASA_API_KEY;
 
 // Creating async action
-export const fetchNeo = createAsyncThunk('neo/fetchNeo', async (date: string) => {
+export const fetchNeo = createAsyncThunk('neoData/fetchNeo', async (date: string) => {
     const response = await axios.get(`${API_URL}?start_date=${date}&end_date=${date}&api_key=${API_KEY}`);
     return response.data;
 });
