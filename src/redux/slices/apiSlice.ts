@@ -1,24 +1,23 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import {Neo, NeoState} from "../../shared/interfaces/api.interfaces";
+import {NEOData, NeoState} from "../../shared/interfaces/api.interfaces";
 
 const API_URL = import.meta.env.VITE_NASA_API_URL;
 const API_KEY = import.meta.env.VITE_NASA_API_KEY;
 
-// Создаем асинхронный экшен
+// Creating async action
 export const fetchNeo = createAsyncThunk('neo/fetchNeo', async (date: string) => {
     const response = await axios.get(`${API_URL}?start_date=${date}&end_date=${date}&api_key=${API_KEY}`);
-    console.log(response)
     return response.data;
 });
 
 const initialState: NeoState = {
-    data: [],
+    data: null,
     status: 'idle',
     error: null,
 };
 
-// Создаем срез
+// Creating slice
 const apiSlice = createSlice({
     name: 'neo',
     initialState,
@@ -28,9 +27,8 @@ const apiSlice = createSlice({
             .addCase(fetchNeo.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(fetchNeo.fulfilled, (state, action: PayloadAction<Neo[]>) => {
+            .addCase(fetchNeo.fulfilled, (state, action: PayloadAction<NEOData>) => {
                 state.status = 'succeeded';
-                // добавляем полученные данные в состояние
                 state.data = action.payload;
             })
             .addCase(fetchNeo.rejected, (state, action) => {

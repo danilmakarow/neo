@@ -1,16 +1,10 @@
-export interface Neo {
-    id: string;
-    name: string;
-    // добавь здесь другие свойства, которые тебе нужны
-}
-
 export interface NeoState {
-    data: Neo[];
+    data: NEOData | null;
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
     error: string | null;
 }
 
-export interface GeneralData {
+export interface NEOData {
     links: {
         next: string;
         previous: string;
@@ -70,4 +64,11 @@ export interface NEO {
     is_sentry_object: boolean;
 }
 
-
+export interface Statistics {
+    amount: number,
+    hazardous: number,
+    date: string,
+    big: NEO | null,
+    close: NEO | null,
+    fast: NEO | null
+}

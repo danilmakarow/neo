@@ -1,30 +1,28 @@
 import {fetchNeo} from "../../redux/slices/apiSlice";
 import {store} from "../../redux/store";
-
+import {NEO, Statistics} from "../../shared/interfaces/api.interfaces";
+import {updateStatistics} from "../../redux/serviceActions";
 
 let startData: string;
 let currentData: string;
 let todayData: string;
 
-let neoElementsArr;
+let neoElementsArr: NEO[] = [];
+let neoToDisplay: NEO[] = [];
 
-
-export async function appInit() {
-    setupData();
-    const data = await getNeoData(currentData)
-    // console.log(data)
-}
-
-function setupData(): void {
+export function setupData(): void {
     const today = new Date();
-    currentData = todayData = today.toLocaleDateString('en-CA');
+     todayData = today.toLocaleDateString('en-CA');
 
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    startData = firstDayOfMonth.toLocaleDateString('en-CA');
+    currentData =startData = firstDayOfMonth.toLocaleDateString('en-CA');
 }
 
-function newDay(): void {
-    currentData = getNextDay(currentData)
+export async function onNewDay() {
+    const data = await getNeoData(currentData);
+    neoElementsArr = data.near_earth_objects[currentData];
+
+    store.dispatch(updateStatistics(calcStatistics(neoElementsArr)));
 }
 
 
@@ -42,12 +40,30 @@ function getNextDay(data: string): string {
 }
 
 export async function getNeoData(date) {
-    // Отправьте экшен fetchNeo
+    // Sending fetch action
     await store.dispatch(fetchNeo(date));
 
-    // Получите обновленное состояние из Redux store
     const state = store.getState();
 
-    // Получите данные, которые вам нужны
     return state.neo.data
+}
+
+function calcStatistics(neo: NEO[]): Statistics {
+    const amount = neo.length;
+    const hazardous = neo.filter(object => object.is_potentially_hazardous_asteroid).length
+    const big = neo.reduce((acc, obj) =>
+        acc.estimated_diameter.kilometers.estimated_diameter_max > obj.estimated_diameter.kilometers.estimated_diameter_max ? acc : obj)
+    const close = neo.reduce((acc, obj) =>
+        acc.close_approach_data[0].miss_distance.kilometers > obj.close_approach_data[0].miss_distance.kilometers  ? acc : obj)
+    const fast = neo.reduce((acc, obj) =>
+        acc.close_approach_data[0].relative_velocity.kilometers_per_hour > obj.close_approach_data[0].relative_velocity.kilometers_per_hour  ? acc : obj)
+
+    return {
+        amount,
+        hazardous,
+        big: big,
+        close: close,
+        fast: fast,
+        date: currentData,
+    }
 }

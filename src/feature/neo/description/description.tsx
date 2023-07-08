@@ -6,9 +6,16 @@ import FormatListNumberedOutlinedIcon from '@mui/icons-material/FormatListNumber
 import SocialDistanceOutlinedIcon from '@mui/icons-material/SocialDistanceOutlined';
 import * as React from 'react';
 import Typography from "@mui/material/Typography";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "@reduxjs/toolkit/dist/query/core/apiState";
+import {Statistics} from "../../../shared/interfaces/api.interfaces";
+import descriptionData from '../../../redux/slices/descriptionSlice'
+import {useEffect} from "react";
+import {updateStatistics} from "../../../redux/serviceActions";
 
-export default function Description() {
-    const [dense, setDense] = React.useState(false);
+ export default function Description() {
+     const statistics = useSelector((state: RootState) => state.description.statistics);
+
     return (
        <div>
            <header className='flex flex--space-between'>
@@ -17,7 +24,7 @@ export default function Description() {
                </Typography>
 
                <Typography variant="h5" >
-                   2023-07-07
+                   {statistics.date}
                </Typography>
            </header>
            <main>
@@ -25,35 +32,35 @@ export default function Description() {
                    <ListItem className='flex flex_gap--10'>
                        <FormatListNumberedOutlinedIcon />
                        <ListItemText
-                           primary="Total number of NEO close to earth: 20"
+                           primary={"Total number of NEO close to earth: " + statistics.amount}
                        />
                    </ListItem>
 
                    <ListItem className='flex flex_gap--10'>
                        <ReportProblemOutlinedIcon />
                        <ListItemText
-                           primary="Number of potentially hazardous NEOs per day: 10"
-                       />
-                   </ListItem>
-
-                   <ListItem className='flex flex_gap--10'>
-                       <StraightenOutlinedIcon />
-                       <ListItemText
-                           primary="Biggest NEO for day: 10"
+                           primary={"Number of potentially hazardous NEOs: " + statistics.hazardous}
                        />
                    </ListItem>
 
                    <ListItem className='flex flex_gap--10'>
                        <SocialDistanceOutlinedIcon />
                        <ListItemText
-                           primary="Closest NEO: 10"
+                           primary={`The closest NEO is "${statistics.close?.name}". It is  ${parseFloat(statistics.big?.close_approach_data[0].miss_distance.kilometers.split('.')[0]).toLocaleString()} km far away!`}
                        />
                    </ListItem>
 
                    <ListItem className='flex flex_gap--10'>
                        <SpeedOutlinedIcon />
                        <ListItemText
-                           primary="Fastest NEO: 10"
+                           primary={`The fastest NEO is "${statistics.fast?.name}". It flies at a speed of ${statistics.big?.close_approach_data[0].relative_velocity.kilometers_per_second.split('.')[0]} km/s!`}
+                       />
+                   </ListItem>
+
+                   <ListItem className='flex flex_gap--10'>
+                       <StraightenOutlinedIcon />
+                       <ListItemText
+                           primary={`The biggest NEO is "${statistics.big?.name}". Its size is up to ${statistics.big?.estimated_diameter.meters.estimated_diameter_max.toFixed(0)} meters!`}
                        />
                    </ListItem>
                </List>
