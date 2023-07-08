@@ -31,10 +31,6 @@ const apiSlice = createSlice({
                 state.status = 'succeeded';
                 state.data = action.payload;
             })
-            .addCase(fetchNeo.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.error.message;
-            });
     },
 });
 

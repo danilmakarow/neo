@@ -1,16 +1,17 @@
-import {Avatar, CircularProgress, List, ListItem, ListItemAvatar, ListItemIcon, ListItemText} from "@mui/material";
+import {Avatar, CircularProgress, List, ListItem} from "@mui/material";
 import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
 import SpeedOutlinedIcon from '@mui/icons-material/SpeedOutlined';
 import StraightenOutlinedIcon from '@mui/icons-material/StraightenOutlined';
 import FormatListNumberedOutlinedIcon from '@mui/icons-material/FormatListNumberedOutlined';
 import SocialDistanceOutlinedIcon from '@mui/icons-material/SocialDistanceOutlined';
-import * as React from 'react';
 import Typography from "@mui/material/Typography";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {RootState} from "@reduxjs/toolkit/dist/query/core/apiState";
 
 
  export default function Description() {
+     // TODO weird error using RootState on deploy, check
+     // @ts-ignore
      const statistics = useSelector((state: RootState) => state.description.statistics);
 
      if (!statistics.big) {

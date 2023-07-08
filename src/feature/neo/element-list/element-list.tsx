@@ -1,15 +1,12 @@
-import * as React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import {useSelector } from 'react-redux';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import {RootState} from "../../../redux/store";
 import {CircularProgress} from "@mui/material";
 
 export default function ElementList() {
     const neos = useSelector((state: RootState) => state.neoDisplay.neos);
-    // console.log('component', neos)
 
     if (!neos[0]) {
         return <CircularProgress />;
@@ -26,7 +23,7 @@ export default function ElementList() {
                 {
                     neos.map(
                         (neo, index) =>
-                            <div key={neo.index}>
+                            <div key={index}>
                                 <ListItem >
                                     <div className='width--100'>
                                         <header>
@@ -63,7 +60,6 @@ export default function ElementList() {
                             </div>
                     )
                 }
-                
             </List>
         </div>
     );
