@@ -11,13 +11,13 @@ export default function ElementList() {
     const dispatch = useDispatch();
     const neoData = useSelector((state) => state.neo.data);
 
-    React.useEffect(() => {
-        dispatch(fetchNeo('2022-10-21'));
-    }, [dispatch]);
-
-    React.useEffect(() => {
-        console.log(neoData);
-    }, [neoData]);
+    // React.useEffect(() => {
+    //     dispatch(fetchNeo('2022-10-04'));
+    // }, [dispatch]);
+    //
+    // React.useEffect(() => {
+    //     console.log(neoData);
+    // }, [neoData]);
 
     return (
         <div>
@@ -27,25 +27,35 @@ export default function ElementList() {
                 </Typography>
             </header>
             <List sx={{ width: '100%', minWidth: 300, bgcolor: 'inherit' }}>
-                <ListItem alignItems="flex-start">
-                    <ListItemText
-                        primary="Name of asteroid"
-                        secondary={
-                            <React.Fragment>
-                                <p>Full name: </p>
-                                <div className="flex flex--space-between">
-                                    <div>
-                                        <p>Speed: 500 y.e.</p>
-                                        <p>Size: 500 y.e.</p>
-                                    </div>
-                                    <div>
-                                        <p>Distance to earth: 500</p>
-                                        <p>Potentially hazardous:</p>
-                                    </div>
-                                </div>
-                            </React.Fragment>
-                        }
-                    />
+                <ListItem >
+                    <div className='width--100'>
+                        <header>
+                            <Typography variant="h6">
+                                Name
+                            </Typography>
+                            <Typography component="div" variant="body2" >
+                                Full name:
+                            </Typography>
+                        </header>
+                        <span className="flex flex--space-between">
+                            <div>
+                                <Typography variant="body2">
+                                    Speed: 500 y.e.
+                                </Typography>
+                                <Typography variant="body2">
+                                    Size: 500 y.e.
+                                </Typography>
+                            </div>
+                            <div>
+                                <Typography variant="body2">
+                                    Distance to earth: 500
+                                </Typography>
+                                <Typography variant="body2">
+                                    Potentially hazardous:
+                                </Typography>
+                            </div>
+                        </span>
+                    </div>
                 </ListItem>
 
                 <Divider variant="fullWidth" component="li" />

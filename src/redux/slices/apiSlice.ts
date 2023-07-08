@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import {Neo, NeoState} from "../../interfaces/api.interfaces";
+import {Neo, NeoState} from "../../shared/interfaces/api.interfaces";
 
 const API_URL = import.meta.env.VITE_NASA_API_URL;
 const API_KEY = import.meta.env.VITE_NASA_API_KEY;
@@ -8,6 +8,7 @@ const API_KEY = import.meta.env.VITE_NASA_API_KEY;
 // Создаем асинхронный экшен
 export const fetchNeo = createAsyncThunk('neo/fetchNeo', async (date: string) => {
     const response = await axios.get(`${API_URL}?start_date=${date}&end_date=${date}&api_key=${API_KEY}`);
+    console.log(response)
     return response.data;
 });
 
