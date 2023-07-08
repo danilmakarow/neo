@@ -12,7 +12,7 @@ export default function Description() {
     return (
        <div>
            <header className='flex flex--space-between'>
-               <Typography variant="h6" sx={{ flexGrow: 1 }}>
+               <Typography variant="h5" sx={{ flexGrow: 1 }}>
                    Statistics for the day:
                </Typography>
 
