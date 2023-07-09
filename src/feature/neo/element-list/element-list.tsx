@@ -19,12 +19,16 @@ export default function ElementList() {
                     Near Orbital Objects
                 </Typography>
             </header>
-            <List sx={{ width: '100%', minWidth: 300, bgcolor: 'inherit' }}>
+            <List sx={{ width: '100%', minWidth: 300, bgcolor:  'inherit' }}>
                 {
                     neos.map(
                         (neo, index) =>
                             <div key={index}>
-                                <ListItem >
+                                <ListItem sx={{
+                                    bgcolor: neo.is_potentially_hazardous_asteroid? 'rgba(224,49,49,0.25)' : 'inherit',
+                                    borderRadius: '15px',
+                                    border: neo.is_potentially_hazardous_asteroid? '1px solid rgba(224,49,49)' : 0}
+                                }>
                                     <div className='width--100'>
                                         <header>
                                             <Typography variant="h6">

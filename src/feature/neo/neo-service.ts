@@ -11,42 +11,22 @@ let neoElementsArr: NEO[] = [];
 let neoToDisplay: NEO[] = [];
 
 let intervalId: any; //TODO put setInterval interface here
-
-export function setupData(): void {
-    const today = new Date();
-     todayData = today.toLocaleDateString('en-CA');
-
-    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    currentData = startData = firstDayOfMonth.toLocaleDateString('en-CA');
-}
-
-export async function onNewDay() {
-    neoToDisplay = [];
-    const data = await getNeoData(currentData);
-    neoElementsArr = [...data.near_earth_objects[currentData]];
-
-    store.dispatch(updateStatistics(calcStatistics(neoElementsArr)));
-
-    updateDisplayArray()
-
-    addNewElement()
-}
+let intervalTime: number = 5000;
 
 function addNewElement(): void {
-    if (intervalId) {
+    if (intervalId)
         clearInterval(intervalId);
-    }
+
 
     intervalId = setInterval(() => {
         if (neoElementsArr.length > 0) {
             updateDisplayArray()
         } else {
             clearInterval(intervalId);
-            console.log(getNextDay(currentData))
             currentData = getNextDay(currentData);
             onNewDay();
         }
-    }, 5000);
+    }, intervalTime);
 
 }
 
@@ -59,8 +39,6 @@ function updateDisplayArray(): void {
 
     store.dispatch(updateNeoDisplay([...neoToDisplay]));
 }
-
-
 
 function getNextDay(data: string): string {
     const dataArr = data.split('-');
@@ -75,15 +53,6 @@ function getNextDay(data: string): string {
     }
 
     return dataArr.join('-');
-}
-
-export async function getNeoData(date: string): Promise<NEOData> {
-    // Sending fetch action
-    await store.dispatch(fetchNeo(date));
-
-    const state = store.getState();
-
-    return state.neoData.data as NEOData
 }
 
 function calcStatistics(neo: NEO[]): Stats {
@@ -104,4 +73,46 @@ function calcStatistics(neo: NEO[]): Stats {
         fast: fast,
         date: currentData,
     }
+}
+
+async function getNeoData(date: string): Promise<NEOData> {
+    // Sending fetch action
+    await store.dispatch(fetchNeo(date));
+
+    const state = store.getState();
+
+    return state.neoData.data as NEOData
+}
+
+export function setupData(): void {
+    const today = new Date();
+    todayData = today.toLocaleDateString('en-CA');
+
+    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    currentData = startData = firstDayOfMonth.toLocaleDateString('en-CA');
+}
+
+export async function onNewDay() {
+    neoToDisplay = [];
+    const data = await getNeoData(currentData);
+    neoElementsArr = [...data.near_earth_objects[currentData]];
+
+    store.dispatch(updateStatistics(calcStatistics(neoElementsArr)));
+
+    updateDisplayArray()
+
+    addNewElement()
+}
+
+export function updateInterval(seconds: number): void {
+    intervalTime = seconds * 1000;
+    addNewElement();
+}
+
+export function skipDay(): void {
+    if (intervalId)
+        clearInterval(intervalId);
+
+    currentData = getNextDay(currentData);
+    onNewDay()
 }

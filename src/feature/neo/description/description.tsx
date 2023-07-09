@@ -1,18 +1,28 @@
-import {Avatar, CircularProgress, List, ListItem} from "@mui/material";
+import {Button, CircularProgress, List, ListItem, Slider} from "@mui/material";
 import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
 import SpeedOutlinedIcon from '@mui/icons-material/SpeedOutlined';
 import StraightenOutlinedIcon from '@mui/icons-material/StraightenOutlined';
 import FormatListNumberedOutlinedIcon from '@mui/icons-material/FormatListNumberedOutlined';
 import SocialDistanceOutlinedIcon from '@mui/icons-material/SocialDistanceOutlined';
+import SendIcon from '@mui/icons-material/Send';
 import Typography from "@mui/material/Typography";
 import {useSelector} from "react-redux";
 import {RootState} from "@reduxjs/toolkit/dist/query/core/apiState";
+import {updateInterval, skipDay} from "../neo-service";
 
 
  export default function Description() {
-     // TODO weird error using RootState on deploy, check
+     // TODO weird type error in RootState when building app, check
      // @ts-ignore
      const statistics = useSelector((state: RootState) => state.description.statistics);
+
+     const onSliderChange = (_, value) => {
+         updateInterval(value);
+     };
+
+     const onButton = () => {
+         skipDay()
+     }
 
      if (!statistics.big) {
          return <CircularProgress />;
@@ -84,6 +94,30 @@ import {RootState} from "@reduxjs/toolkit/dist/query/core/apiState";
                        </Typography>
                    </ListItem>
                </List>
+               <div className="flex flex--space-between flex_gap--50">
+                   <div className="width--max">
+                       <Button
+                           variant="outlined"
+                           endIcon={<SendIcon />}
+                           className="width--max"
+                           onClick={onButton}
+                       >Skip to next day</Button>
+                   </div>
+                   <div className="width--100">
+                       <Typography id="input-slider" gutterBottom>
+                           Change NEO Interval (seconds)
+                       </Typography>
+                       <Slider
+                           size="small"
+                           defaultValue={5}
+                           aria-label="Small"
+                           valueLabelDisplay="auto"
+                           min={1}
+                           max={10}
+                           onChange={onSliderChange}
+                       />
+                   </div>
+               </div>
            </main>
        </div>
     );
